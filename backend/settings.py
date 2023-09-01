@@ -168,7 +168,7 @@ AUTH_USER_MODEL = 'users.User'
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
-    'twitter-clone-navinoxx.netlify.app',
+    'https://twitter-clone-navinoxx.netlify.app',
 ]
 
 REST_FRAMEWORK = {
