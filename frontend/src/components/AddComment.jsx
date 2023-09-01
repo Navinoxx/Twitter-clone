@@ -7,6 +7,7 @@ import { useFormik } from "formik";
 export const AddComment = ({ tweet }) => {  
     const queryClient = useQueryClient()
     const avatar = localStorage.getItem('avatar')
+    const baseURL = import.meta.env.VITE_BACKEND_HTTP
 
     const addCommmentMutation = useMutation({
         mutationFn: addComment,
@@ -35,8 +36,12 @@ export const AddComment = ({ tweet }) => {
     return (
         <div className="border-b-[1px] border-neutral-800 p-5">
             <form onSubmit={formik.handleSubmit} >
-                <div className="flex gap-3 w-full border-b-[1px] border-neutral-800 p-3">
-                    <img src={`http://127.0.0.1:8000${avatar}`} className="h-14 w-14 rounded-full" />
+                <div className="flex gap-3 w-full border-b-[1px] border-neutral-800 p-1">
+                <div className="avatar">
+                        <div className="w-11 bg-black rounded-full">
+                            <img src={`${baseURL}${avatar}`} />
+                        </div>
+                    </div>
                     <input 
                         type="text" name="body" onChange={formik.handleChange} value={formik.values.body} 
                         className="bg-transparent grow outline-none" placeholder="Comentar" />

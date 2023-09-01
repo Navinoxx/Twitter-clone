@@ -13,6 +13,8 @@ import { CommentBtn } from "../components/CommentBtn";
 
 export const Tweet = () => {
     const { id } = useParams();
+    
+    const baseURL = import.meta.env.VITE_BACKEND_HTTP
 
     const {
         data: tweet,
@@ -35,7 +37,7 @@ export const Tweet = () => {
                 <div className="flex flex-row items-start gap-3">
                     <div className="avatar">
                         <div className="w-11 bg-black rounded-full">
-                            <img src={`http://127.0.0.1:8000${tweet.avatar}`} />
+                            <img src={`${baseURL}${tweet.avatar}`} />
                         </div>
                     </div>
                     <div>
