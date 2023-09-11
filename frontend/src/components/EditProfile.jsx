@@ -7,6 +7,34 @@ import { ModalEditProfile } from './ModalEditProfile';
 import { TbCameraUp } from "react-icons/tb";
 import { useState } from "react";
 
+const uploadToCloudinary = async (file, folder) => {
+    try {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'ml_default'); 
+
+        formData.append('folder', `users/${folder}`);
+
+        const response = await fetch('https://api.cloudinary.com/v1_1/dk1wzv0od/image/upload', {
+            method: 'POST',
+            body: formData,
+        });
+
+        if (!response.ok) {
+            const errorMessage = `Error al subir la imagen a Cloudinary: ${response.status} - ${await response.text()}`;
+            throw new Error(errorMessage);
+        }
+
+        const data = await response.json();
+
+        return { secure_url: data.secure_url, public_id: data.public_id };
+    } catch (error) {
+        console.error('Error en uploadToCloudinary:', error);
+        throw error;
+    }
+    
+};
+
 export const EditProfile = ({ user, showModal, setShowModal }) => {
     const queryClient = useQueryClient();
     const updateProfileMutation = useMutation({
@@ -31,28 +59,48 @@ export const EditProfile = ({ user, showModal, setShowModal }) => {
         initialValues: {
             name: '',
             bio: '',
-            avatar: null,
-            cover_image: null,
+            avatar: user.avatar,
+            cover_image: user.cover_image,   
         },
-        onSubmit: (values) => { 
-            const { name, bio, avatar, cover_image } = values
-            const formData = new FormData()
-            if (values.name) {
-                formData.append("name", name);
+        onSubmit: async (values) => {
+            try {
+                const { name, bio, avatar, cover_image } = values;
+                const formData = new FormData();
+
+                if (values.name) {
+                    formData.append('name', name);
+                }
+                if (values.bio) {
+                    formData.append('bio', bio);
+                }
+
+                if (values.avatar) {
+                    const { secure_url, public_id } = await uploadToCloudinary(
+                        avatar,
+                        user.username,
+                    );
+                    formData.append('avatar', secure_url);
+                    formData.append('avatar_public_id', public_id);
+                    localStorage.setItem('avatar', secure_url);
+                }
+
+                if (values.cover_image) {
+                    const { secure_url, public_id } = await uploadToCloudinary(
+                        cover_image,
+                        user.username,                                     
+                    );
+                    formData.append('cover_image', secure_url);
+                    formData.append('cover_image_public_id', public_id);
+                }
+
+                updateProfileMutation.mutate(formData);
+                closeModal();
+            } catch (error) {
+                console.error(error);
+                toast.error('Error al cargar la imagen');
             }
-            if (values.bio) {
-                formData.append("bio", bio);
-            }
-            if (values.avatar) {
-                formData.append("avatar", avatar);
-            }
-            if (values.cover_image) {
-                formData.append("cover_image", cover_image);
-            }
-            updateProfileMutation.mutate(formData)
-            closeModal()
-        },  
-    })      
+        },
+    });
 
     const [previewCoverImage, setPreviewCoverImage] = useState(user.cover_image);
     const handlePreviewCoverImage = (e) => {
@@ -64,7 +112,7 @@ export const EditProfile = ({ user, showModal, setShowModal }) => {
                 setPreviewCoverImage(reader.result);
             };
         }
-    }
+    };
 
     const [previewAvatar, setPreviewAvatar] = useState(user.avatar);
     const handlePreviewAvatar = (e) => {
@@ -76,7 +124,7 @@ export const EditProfile = ({ user, showModal, setShowModal }) => {
                 setPreviewAvatar(reader.result);
             };
         }
-    }
+    };
 
     return (
         <>
@@ -91,8 +139,8 @@ export const EditProfile = ({ user, showModal, setShowModal }) => {
                     <h2 className="text-2xl text-grey">Editar perfil</h2>
                 </div>
                     <form onSubmit={formik.handleSubmit} className="mt-5">
-                        <div className="inline-flex place-items-center justify-center">
-                            <img className="bg-black h-[16rem] w-full" src={previewCoverImage} />
+                        <div className="inline-flex place-items-center justify-center w-full">
+                            <img className="bg-black h-[16rem] w-full object-cover" src={previewCoverImage} />
                             <label htmlFor="cover_image" className="btn glass opacity-70 btn-circle absolute">
                                 <TbCameraUp/>
                             </label>

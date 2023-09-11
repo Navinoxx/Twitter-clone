@@ -35,6 +35,7 @@ export const Messages = () => {
 };
 
 function ContactItem({ contact }) {
+    
     const { data: unreadNotifications } = useQuery({
         queryKey: ["unread_count", contact.username],
         queryFn: () => getUnreadMessages(contact.username),
@@ -46,7 +47,7 @@ function ContactItem({ contact }) {
                 <div className="flex flex-row items-start gap-3">
                     <div className="avatar">
                         <div className="w-11 bg-black rounded-full">
-                            <img src={`http://127.0.0.1:8000${contact.avatar}`} alt={contact.username} />
+                            <img src={`${contact.avatar}`} alt={contact.username} />
                         </div>
                     </div>
                     <div className="flex flex-col flex-1">

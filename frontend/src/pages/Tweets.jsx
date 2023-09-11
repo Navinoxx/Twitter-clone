@@ -13,8 +13,6 @@ import { CommentBtn } from "../components/CommentBtn";
 
 export const Tweet = () => {
     const { id } = useParams();
-    
-    const baseURL = import.meta.env.VITE_BACKEND_HTTP
 
     const {
         data: tweet,
@@ -29,7 +27,7 @@ export const Tweet = () => {
         </div>
     );
     if (isError) return toast.error(error.message);
-
+    
     return (
         <>
             <TitleFeed title="Tweet"/>
@@ -37,7 +35,7 @@ export const Tweet = () => {
                 <div className="flex flex-row items-start gap-3">
                     <div className="avatar">
                         <div className="w-11 bg-black rounded-full">
-                            <img src={`${baseURL}${tweet.avatar}`} />
+                            <img src={`${tweet.avatar}`} />
                         </div>
                     </div>
                     <div>

@@ -33,7 +33,7 @@ export const Notifications = () => {
 
     const allNotifications = [...(unreadNotifications ?? []), ...(readNotifications ?? [])];
     allNotifications.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-
+    
     const handleMarkAsRead = (notificationId, tweetId) => {
         markMutation.mutate(notificationId);
         navigate(`/tweet/${tweetId}`);
@@ -68,7 +68,7 @@ export const Notifications = () => {
                     <div className="flex flex-row items-start gap-3">
                         <div className="avatar">
                             <div className="w-11 bg-black rounded-full">
-                                <img src={`http://127.0.0.1:8000${notification.from_user_avatar}`} />
+                                <img src={`${notification.from_user_avatar}`} />
                             </div>
                         </div>
                         <div>

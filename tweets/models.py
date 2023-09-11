@@ -6,7 +6,8 @@ from users.models import User
 class Tweet(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tweets')
     content = models.TextField(blank=True, null=True)
-    image = models.ImageField(blank=True, null=True, validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'gif'])])
+    image = models.CharField(blank=True, max_length=255, validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'gif'])])
+    image_public_id = models.CharField(max_length=255, blank=True)
     liked = models.ManyToManyField(User, default=None, blank=True, related_name='liked')
     retweeted = models.ManyToManyField(User, default=None, blank=True, related_name='retweeted')
     bookmarked = models.ManyToManyField(User, default=None, blank=True, related_name='bookmarked')

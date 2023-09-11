@@ -23,7 +23,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'avatar', 'bio', 'cover_image', 
+        fields = ['id', 'username', 'email', 'avatar', 'avatar_public_id', 'cover_image', 'cover_image_public_id',
                   'date_joined', 'i_follow', 'followers', 'following', 'name', 'followed_usernames', 'following_usernames']
 
     def get_i_follow(self, obj):
@@ -38,7 +38,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_followed_usernames(self, obj): 
         return obj.followed_usernames
-    
+        
     def get_following_usernames(self, obj): 
         return obj.following_usernames
 
@@ -49,7 +49,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         token['name'] = user.name
         token['username'] = user.username
-        token['avatar'] = user.avatar.url
+        token['avatar'] = user.avatar
 
         return token
 

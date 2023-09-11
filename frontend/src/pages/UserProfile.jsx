@@ -68,7 +68,7 @@ export const UserProfile = () => {
         <>
             <EditProfile user={user} showModal={showModal} setShowModal={setShowModal} />
             <TitleFeed title={user.username}/>
-            <img className="bg-black h-[250px] w-full" src={user.cover_image} />    
+            <img className="bg-black h-[16rem] w-full object-cover" src={user.cover_image} />    
             <div className="flex justify-between">
                 <div className="avatar ml-3 -mt-20">
                     <div className="w-36 bg-black rounded-full">

@@ -62,7 +62,7 @@ export const MyTweets = ({ user, myUser }) => {
                         <div className="text-white mt-1 text-start break-all">{t.content}</div>
                         {
                             t.image &&
-                            <img src={`http://127.0.0.1:8000${t.image}`} />
+                            <img src={`${t.image}`} />
                         }
 
                         <div className="flex flex-row items-center mt-3 gap-10">

@@ -8,7 +8,8 @@ from . serializers import TweetSerializer, MyTweetSerializer, CommentSerializer
 from .permissions import IsUserOrReadOnly
 from backend.pagination import CustomPagination
 from notifications.models import Notification
-
+import cloudinary
+import cloudinary.uploader
 
 class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
@@ -111,9 +112,24 @@ class TweetList(generics.ListCreateAPIView):
     pagination_class = CustomPagination
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        image_url = self.request.data.get('image') 
+        public_id = self.request.data.get('image_public_id')
+
+        if image_url:
+            serializer.save(user=self.request.user, image=image_url, image_public_id=public_id)
+        else:
+            serializer.save(user=self.request.user)
 
 class TweetDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Tweet.objects.all()
     serializer_class = TweetSerializer
     permission_classes = [IsAuthenticated, IsUserOrReadOnly]
+
+    def perform_destroy(self, serializer):
+        tweet = self.get_object()
+
+        if tweet.image_public_id:
+            cloudinary.uploader.destroy(tweet.image_public_id)
+
+        tweet.delete()
+

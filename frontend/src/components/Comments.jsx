@@ -47,7 +47,7 @@ export const Comments = ({ tweet }) => {
                 <div className="flex flex-row items-start gap-3">
                     <img
                     className="h-11 w-11 rounded-full"
-                    src={`http://127.0.0.1:8000${c.avatar}`}
+                    src={`${c.avatar}`}
                     />
                     <div>
                         <div className="flex flex-row items-center gap-2">

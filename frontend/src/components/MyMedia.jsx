@@ -9,7 +9,7 @@ export const MyMedia = ({ tweets }) => {
             {tweets.map((t) => (
                 t.userId === userId && t.image && (
                     <div className="flex flex-row items-start gap-3" key={t.id}>
-                        <img src={`http://127.0.0.1:8000${t.image}`} />
+                        <img src={`${t.image}`} />
                     </div>
                 )
             ))}

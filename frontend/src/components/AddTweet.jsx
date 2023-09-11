@@ -7,6 +7,34 @@ import { BsImage } from "react-icons/bs";
 import { useEffect, useState } from "react";
 import { userProfile } from "../api/users";
 
+const uploadToCloudinary = async (file, folder) => {
+    try {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'ml_default'); 
+
+        formData.append('folder', `tweets/${folder}`);
+
+        const response = await fetch('https://api.cloudinary.com/v1_1/dk1wzv0od/image/upload', {
+            method: 'POST',
+            body: formData,
+        });
+
+        if (!response.ok) {
+            const errorMessage = `Error al subir la imagen a Cloudinary: ${response.status} - ${await response.text()}`;
+            throw new Error(errorMessage);
+        }
+
+        const data = await response.json();
+
+        return { secure_url: data.secure_url, public_id: data.public_id };
+    } catch (error) {
+        console.error('Error en uploadToCloudinary:', error);
+        throw error;
+    }
+    
+};
+
 export const AddTweet = () => {
     const queryClient = useQueryClient();
     const username = localStorage.getItem("username");
@@ -29,23 +57,30 @@ export const AddTweet = () => {
         },
     });
 
-    const iniV = {
-        content: "",
-        image: "",
-    };
-
     const formik = useFormik({
-        initialValues: iniV,
-        onSubmit: (values, { resetForm }) => {
-        const { content, image } = values;
-        const formData = new FormData();
+        initialValues: {
+            content: "",
+            image: "",
+        },
+        onSubmit: async (values) => {
+            try {
+                const { content, image } = values;
+                const formData = new FormData();
 
-        formData.append("content", content);
-        if (image) {
-            formData.append("image", image);
-        }
-        addTweetMutation.mutate(formData);
-        resetForm({ values: iniV });
+                formData.append("content", content);
+                if (values.image) {
+                    const { secure_url, public_id } = await uploadToCloudinary(
+                        image,
+                        user.username,
+                    );
+                    formData.append('image', secure_url);
+                    formData.append('image_public_id', public_id);
+                }
+                addTweetMutation.mutate(formData);
+                formik.resetForm() 
+            } catch (error) {
+                console.error(error);
+            }
         },
     });
 

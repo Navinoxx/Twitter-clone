@@ -10,7 +10,7 @@ import { CommentBtn } from './CommentBtn';
 
 export const MyRe = ({ user }) => {
     const userId = localStorage.getItem("user_id");
-
+    
     const {
         data: rt,
         isLoading,
@@ -36,7 +36,7 @@ export const MyRe = ({ user }) => {
                 <div className="flex flex-row items-start gap-3">
                     <div className="avatar">
                         <div className="w-11 bg-black rounded-full">
-                            <img src={`http://127.0.0.1:8000${t.avatar}`} />
+                            <img src={`${t.avatar}`} />
                         </div>
                     </div>
                     <div>

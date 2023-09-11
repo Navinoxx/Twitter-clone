@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'chat',
     'notifications',
     'tweets',
+    'cloudinary',
 ]
 
 MIDDLEWARE = [
@@ -168,7 +169,8 @@ AUTH_USER_MODEL = 'users.User'
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
-    'https://twitter-clone-navinoxx.netlify.app',
+    'http://localhost:5173',
+    'https://twitter-clone-navinoxx.netlify.app'
 ]
 
 REST_FRAMEWORK = {

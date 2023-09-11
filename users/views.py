@@ -11,6 +11,10 @@ from . serializers import MyTokenObtainPairSerializer, MyUserSerializer, UserSer
 from .permissions import IsUserOrReadOnly
 from notifications.models import Notification
 from rest_framework.exceptions import ValidationError
+import cloudinary
+import cloudinary.uploader
+from cloudinary import api
+import os
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -50,13 +54,24 @@ def search_users(request):
         return Response({ 'users': serializer.data })
     else:
         return Response({ 'users': [] })
-
+    
 class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated, IsUserOrReadOnly]
     lookup_field = 'username'
     lookup_url_kwarg = 'username'
+
+    def perform_update(self, serializer):
+        user = self.get_object()
+
+        if user.avatar_public_id:
+            cloudinary.uploader.destroy(user.avatar_public_id)
+
+        if user.cover_image_public_id:
+            cloudinary.uploader.destroy(user.cover_image_public_id)
+
+        serializer.save()
 
 class MyTokenObtainPairSerializer(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer

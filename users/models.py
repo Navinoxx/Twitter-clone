@@ -11,10 +11,8 @@ class CustomUserManager(UserManager):
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         
-        # Remove confirm_password from extra_fields
         confirm_password = extra_fields.pop('confirm_password', None)
         
-        # Compare passwords for validation
         if password != confirm_password:
             raise ValueError('Passwords do not match')
 
@@ -38,8 +36,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=255, blank=True)
     following = models.ManyToManyField("self",symmetrical=False,related_name="followed" ,blank=True)
     bio = models.CharField(max_length=255, blank=True)
-    avatar = models.ImageField(default='user.png')
-    cover_image = models.ImageField(default='cover.jpeg')
+    avatar = models.CharField(max_length=255, default='https://res.cloudinary.com/dk1wzv0od/image/upload/v1693680231/Media/user_op1zes.png')
+    avatar_public_id = models.CharField(max_length=255, null=True, blank=True)
+    cover_image = models.CharField(max_length=255, default='https://res.cloudinary.com/dk1wzv0od/image/upload/v1693680224/Media/cover_fecqog.jpg')
+    cover_image_public_id = models.CharField(max_length=255, null=True, blank=True)
     date_joined = models.DateTimeField(default=timezone.now)
 
     is_staff = models.BooleanField(default=False)
@@ -54,8 +54,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     @property
     def followed_usernames(self):
-        return [{'name': user.name, 'username': user.username, 'bio': user.bio, 'avatar': user.avatar.url} for user in self.followed.all()]
+        return [{'name': user.name, 'username': user.username, 'bio': user.bio, 'avatar': user.avatar} for user in self.followed.all()]
     
     @property
     def following_usernames(self):
-        return [{'name': user.name, 'username': user.username, 'bio': user.bio, 'avatar': user.avatar.url} for user in self.following.all()]
+        return [{'name': user.name, 'username': user.username, 'bio': user.bio, 'avatar': user.avatar} for user in self.following.all()]

@@ -38,7 +38,7 @@ export const Bookmarked = () => {
                         <div className="flex flex-row items-start gap-3">
                             <div className="avatar">
                                 <div className="w-11 bg-black rounded-full">
-                                    <img src={`http://127.0.0.1:8000${t.avatar}`} />
+                                    <img src={`${t.avatar}`} />
                                 </div>
                             </div>
                             <div>
