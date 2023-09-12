@@ -108,7 +108,7 @@ CHANNEL_LAYERS = {
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='postgres://twitterpostgres_user:w22fGok1YjlKYvKKDrrPz83Tdr6Z3Z2m@dpg-cjnqj5a1u98s73fp7c20-a.oregon-postgres.render.com/twitterpostgres',
+        default='postgres://twitterpostgres_user:w22fGok1YjlKYvKKDrrPz83Tdr6Z3Z2m@dpg-cjnqj5a1u98s73fp7c20-a/twitterpostgres',
         conn_max_age=600
     )
 }
@@ -170,7 +170,7 @@ AUTH_USER_MODEL = 'users.User'
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
-    'https://twitter-clone-navinoxx.netlify.app'
+    'https://twitter-clone-navinoxx.netlify.app',
 ]
 
 REST_FRAMEWORK = {
