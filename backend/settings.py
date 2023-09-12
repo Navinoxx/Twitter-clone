@@ -108,7 +108,7 @@ CHANNEL_LAYERS = {
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='sqlite:///db.sqlite3',
+        default='postgres://twitterpostgres_user:w22fGok1YjlKYvKKDrrPz83Tdr6Z3Z2m@dpg-cjnqj5a1u98s73fp7c20-a/twitterpostgres',
         conn_max_age=600
     )
 }
