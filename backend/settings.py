@@ -106,12 +106,14 @@ CHANNEL_LAYERS = {
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': dj_database_url.config(
-        default='postgres://twitterpostgres_user:w22fGok1YjlKYvKKDrrPz83Tdr6Z3Z2m@dpg-cjnqj5a1u98s73fp7c20-a/twitterpostgres',
-        conn_max_age=600
-    )
-}
+if not DEBUG:
+    DATABASES = {'default': dj_database_url.config(os.environ.get('DATABASE_URL'))}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'db.sqlite3',
+        }}
 
 
 # Password validation
