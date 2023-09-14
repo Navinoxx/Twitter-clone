@@ -108,7 +108,7 @@ CHANNEL_LAYERS = {
 if not DEBUG:
     DATABASES = {
         'default': dj_database_url.config(
-            default=os.environ.get('DATABASE_URL')
+            default='postgres://twitterpostgres_user:w22fGok1YjlKYvKKDrrPz83Tdr6Z3Z2m@dpg-cjnqj5a1u98s73fp7c20-a/twitterpostgres'
         )
     }
 else:
