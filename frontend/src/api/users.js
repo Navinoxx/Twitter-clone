@@ -45,4 +45,3 @@ export const userProfile = async (username) => {
 export const deleteUser = async () => {
     await authAxios.delete(`/users/${localStorage.getItem('username')}/delete/`)
 }
-

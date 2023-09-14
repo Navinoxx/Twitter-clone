@@ -13,8 +13,6 @@ from notifications.models import Notification
 from rest_framework.exceptions import ValidationError
 import cloudinary
 import cloudinary.uploader
-from cloudinary import api
-import os
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
