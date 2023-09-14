@@ -108,7 +108,7 @@ CHANNEL_LAYERS = {
 if not DEBUG:
     DATABASES = {
         'default': dj_database_url.config(
-            os.environ.get('DATABASE_URL')
+            default=os.environ.get('DATABASE_URL')
         )
     }
 else:
