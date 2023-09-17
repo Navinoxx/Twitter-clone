@@ -105,19 +105,11 @@ CHANNEL_LAYERS = {
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-if not DEBUG:
-    DATABASES = {
-        'default': dj_database_url.config(
-            default='postgres://twitterpostgres_user:w22fGok1YjlKYvKKDrrPz83Tdr6Z3Z2m@dpg-cjnqj5a1u98s73fp7c20-a/twitterpostgres',
-            conn_max_age=600
-        )
-    }
-else:
-    DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+DATABASES = {
+    'default': dj_database_url.config(
+        default='sqlite:///db.sqlite3',
+        conn_max_age=600
+    )
 }
 
 
