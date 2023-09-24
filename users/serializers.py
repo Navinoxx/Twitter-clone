@@ -23,7 +23,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'avatar', 'avatar_public_id', 'cover_image', 'cover_image_public_id',
+        fields = ['id', 'username', 'email', 'bio', 'avatar', 'avatar_public_id', 'cover_image', 'cover_image_public_id',
                   'date_joined', 'i_follow', 'followers', 'following', 'name', 'followed_usernames', 'following_usernames']
 
     def get_i_follow(self, obj):

@@ -6,34 +6,8 @@ import { toast } from "react-hot-toast";
 import { BsImage } from "react-icons/bs";
 import { useEffect, useState } from "react";
 import { userProfile } from "../api/users";
-
-const uploadToCloudinary = async (file, folder) => {
-    try {
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', 'ml_default'); 
-
-        formData.append('folder', `tweets/${folder}`);
-
-        const response = await fetch('https://api.cloudinary.com/v1_1/dk1wzv0od/image/upload', {
-            method: 'POST',
-            body: formData,
-        });
-
-        if (!response.ok) {
-            const errorMessage = `Error al subir la imagen a Cloudinary: ${response.status} - ${await response.text()}`;
-            throw new Error(errorMessage);
-        }
-
-        const data = await response.json();
-
-        return { secure_url: data.secure_url, public_id: data.public_id };
-    } catch (error) {
-        console.error('Error en uploadToCloudinary:', error);
-        throw error;
-    }
-    
-};
+import { uploadToCloudinary } from "../utils/UploadToCloudinary";
+import { EmojiPicker } from "./EmojiPicker";
 
 export const AddTweet = () => {
     const queryClient = useQueryClient();
@@ -71,6 +45,7 @@ export const AddTweet = () => {
                 if (values.image) {
                     const { secure_url, public_id } = await uploadToCloudinary(
                         image,
+                        'tweets',
                         user.username,
                     );
                     formData.append('image', secure_url);
@@ -109,9 +84,7 @@ export const AddTweet = () => {
                 <div className="flex justify-between p-3 border-t-[1px] border-neutral-800 mx-12">
                     <div className="flex my-auto">
                         <label htmlFor="file-input" className="btn btn-circle btn-outline btn-sm border-none hover:bg-sky-500 hover:bg-opacity-10">
-                        {!formik.values.image && (
                             <BsImage className="flex transition text-sky-500"/>
-                        )}
                         </label>
                         <input
                         id="file-input"
@@ -122,13 +95,21 @@ export const AddTweet = () => {
                             formik.setFieldValue("image", event.currentTarget.files[0])
                         }
                         />
+                        <EmojiPicker formik={formik} />
                     </div>
                     <button
                         type="submit"
                         className="btn btn-primary btn-sm rounded-full text-white"
-                        disabled={!formik.values.content && !formik.values.image}
+                        disabled={!formik.values.content && !formik.values.image || formik.isSubmitting}
                     >
-                        Postear
+                        {formik.isSubmitting ? (
+                            <>
+                                <span className="loading loading-spinner"></span>
+                                Posteando
+                            </>
+                        ) : (
+                            'Postear'
+                        )}
                     </button>
                 </div>
             </form>

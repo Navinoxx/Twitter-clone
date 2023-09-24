@@ -5,37 +5,13 @@ import { updateProfile } from "../api/users";
 import toast from "react-hot-toast";
 import { ModalEditProfile } from './ModalEditProfile';
 import { TbCameraUp } from "react-icons/tb";
-import { useState } from "react";
-
-const uploadToCloudinary = async (file, folder) => {
-    try {
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', 'ml_default'); 
-
-        formData.append('folder', `users/${folder}`);
-
-        const response = await fetch('https://api.cloudinary.com/v1_1/dk1wzv0od/image/upload', {
-            method: 'POST',
-            body: formData,
-        });
-
-        if (!response.ok) {
-            const errorMessage = `Error al subir la imagen a Cloudinary: ${response.status} - ${await response.text()}`;
-            throw new Error(errorMessage);
-        }
-
-        const data = await response.json();
-
-        return { secure_url: data.secure_url, public_id: data.public_id };
-    } catch (error) {
-        console.error('Error en uploadToCloudinary:', error);
-        throw error;
-    }
-    
-};
+import { useEffect, useState } from "react";
+import { uploadToCloudinary } from "../utils/UploadToCloudinary";
 
 export const EditProfile = ({ user, showModal, setShowModal }) => {
+    const [previewCoverImage, setPreviewCoverImage] = useState(user.cover_image);
+    const [previewAvatar, setPreviewAvatar] = useState(user.avatar);
+
     const queryClient = useQueryClient();
     const updateProfileMutation = useMutation({
         mutationFn: updateProfile,
@@ -59,8 +35,8 @@ export const EditProfile = ({ user, showModal, setShowModal }) => {
         initialValues: {
             name: '',
             bio: '',
-            avatar: user.avatar,
-            cover_image: user.cover_image,   
+            avatar: '',
+            cover_image: '',
         },
         onSubmit: async (values) => {
             try {
@@ -74,9 +50,10 @@ export const EditProfile = ({ user, showModal, setShowModal }) => {
                     formData.append('bio', bio);
                 }
 
-                if (values.avatar) {
+                if (values.avatar && values.avatar !== previewAvatar) {
                     const { secure_url, public_id } = await uploadToCloudinary(
                         avatar,
+                        'users',
                         user.username,
                     );
                     formData.append('avatar', secure_url);
@@ -84,9 +61,10 @@ export const EditProfile = ({ user, showModal, setShowModal }) => {
                     localStorage.setItem('avatar', secure_url);
                 }
 
-                if (values.cover_image) {
+                if (values.cover_image && values.cover_image !== previewCoverImage) {
                     const { secure_url, public_id } = await uploadToCloudinary(
                         cover_image,
+                        'users',
                         user.username,                                     
                     );
                     formData.append('cover_image', secure_url);
@@ -97,12 +75,11 @@ export const EditProfile = ({ user, showModal, setShowModal }) => {
                 closeModal();
             } catch (error) {
                 console.error(error);
-                toast.error('Error al cargar la imagen');
+                toast.error('Error al actualizar el perfil');
             }
         },
     });
-
-    const [previewCoverImage, setPreviewCoverImage] = useState(user.cover_image);
+    
     const handlePreviewCoverImage = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -114,7 +91,6 @@ export const EditProfile = ({ user, showModal, setShowModal }) => {
         }
     };
 
-    const [previewAvatar, setPreviewAvatar] = useState(user.avatar);
     const handlePreviewAvatar = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -125,6 +101,14 @@ export const EditProfile = ({ user, showModal, setShowModal }) => {
             };
         }
     };
+
+    useEffect(() => {
+        setPreviewAvatar(user.avatar);
+    }, [user.avatar]);
+
+    useEffect(() => {
+        setPreviewCoverImage(user.cover_image);
+    }, [user.cover_image]);
 
     return (
         <>
@@ -156,7 +140,7 @@ export const EditProfile = ({ user, showModal, setShowModal }) => {
                         </div>
                         <div className="inline-flex place-items-center justify-center ml-7 -mt-16">
                             <div className="avatar">
-                                <div className="w-28 bg-black rounded-full">
+                                <div className="w-28 bg-black rounded-full ring ring-black">
                                     <img src={previewAvatar} />
                                 </div>
                             </div>
@@ -191,9 +175,16 @@ export const EditProfile = ({ user, showModal, setShowModal }) => {
                         <button
                             type="submit"
                             className="btn btn-outline rounded-full font-bold w-full mt-5"
-                            disabled={updateProfileMutation.isLoading}
+                            disabled={formik.isSubmitting || formik.initialValues === formik.values}
                         >
-                            {updateProfileMutation.isLoading ? 'Guardando cambios...' : 'Guardar cambios'}
+                            {formik.isSubmitting ? (
+                                <>
+                                    <span className="loading loading-spinner"></span>
+                                    Guardando cambios
+                                </>
+                            ) : (
+                                'Guardar cambios'
+                            )}
                         </button>
                     </form>
             </ModalEditProfile>

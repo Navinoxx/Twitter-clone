@@ -41,7 +41,7 @@ export const Tweet = () => {
                     <div>
                         <div className="flex flex-row items-center gap-2">
                             <p className="text-white font-semibold cursor-pointer hover:underline">
-                                <Link to={`/profile/${tweet.username}`}>{tweet?.user || tweet?.username}</Link>
+                                <Link to={`/${tweet.username}`}>{tweet?.user || tweet?.username}</Link>
                             </p>
                             <span className="text-neutral-500 cursor-pointer hover:underline hidden md:block">
                                 @{tweet.username}

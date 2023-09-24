@@ -9,18 +9,18 @@ export const LikeBtn = ({ t, user }) => {
     const likeMutation = useMutation({
         mutationFn: like,
         onSuccess: () => {
-        queryClient.invalidateQueries('tweets')
+            queryClient.invalidateQueries('tweets')
         },
         onError: (error) => {
-        console.log(error)
+            console.log(error)
         }
     })
 
     const found = t.liked.some((key) => {
         if(key == user){
-        return true
+            return true
         } else {
-        return false
+            return false
         }   
     })
 

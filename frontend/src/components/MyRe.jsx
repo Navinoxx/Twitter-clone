@@ -21,7 +21,11 @@ export const MyRe = ({ user }) => {
         queryFn: () => getUserRt(user.username),
     });
 
-    if (isLoading) return <Loader />;
+    if (isLoading) return 
+        <div className="flex h-screen items-center justify-center">
+            <Loader />
+        </div>;
+        
     if (isError) return toast.error(error.message);
 
     return (

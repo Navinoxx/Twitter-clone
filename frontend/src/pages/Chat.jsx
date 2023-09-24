@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import useWebSocket from "react-use-websocket";
 import jwt_decode from "jwt-decode";
 import { useParams } from "react-router-dom";
@@ -60,15 +60,18 @@ export const Chat = () => {
         setMessage('')
     }
 
-    let newChat = [];
-    if (canal) {
-        let chat = [...canal, ...messageHistory];
-        newChat = chat.filter(message => message.type !== 'chat_message_echo');
-    }
+    const newChat = useMemo(() => {
+        if (canal) {
+            let chat = [...canal, ...messageHistory];
+            return chat.filter(message => message.type !== 'chat_message_echo');
+        }
+
+        return [];
+    }, [canal, messageHistory]);
 
     useEffect(() => {
         queryClient.invalidateQueries(['chat', user]);
-    }, [newChat]);
+    }, [newChat, queryClient, user]);
 
     const chatContainerRef = useRef(null);
 
@@ -78,8 +81,7 @@ export const Chat = () => {
         }
     }, []);
 
-    if (isLoading)
-        return (
+    if (isLoading) return (
         <div className="flex h-screen items-center justify-center">
             <Loader />
         </div>

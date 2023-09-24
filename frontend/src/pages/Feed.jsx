@@ -35,6 +35,11 @@ export const Feed = () => {
         }
     }, [inView, fetchNextPage, hasNextPage, isFetchingNextPage]);
 
+    if (isLoading) return 
+        <div className="flex h-screen items-center justify-center">
+            <Loader />
+        </div>;
+
     return (
         <>
         <TitleFeed title="Inicio"/>
@@ -54,7 +59,7 @@ export const Feed = () => {
                             <div>
                                 <div className="flex flex-row items-center gap-2">
                                     <p className="text-white font-semibold cursor-pointer hover:underline">
-                                        <Link to={`/profile/${t.username}`}>{t?.user || t?.username}</Link>
+                                        <Link to={`/${t.username}`}>{t?.user || t?.username}</Link>
                                     </p>
                                     <span className="text-neutral-500 cursor-pointer hover:underline md:block">
                                         @{t.username}   

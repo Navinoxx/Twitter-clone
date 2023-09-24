@@ -71,7 +71,7 @@ export const UserProfile = () => {
             <img className="bg-black h-[16rem] w-full object-cover" src={user.cover_image} />    
             <div className="flex justify-between">
                 <div className="avatar ml-3 -mt-20">
-                    <div className="w-36 bg-black rounded-full">
+                    <div className="w-[10rem] bg-black rounded-full ring ring-black">
                         <img src={user.avatar} />
                     </div>
                 </div>
@@ -90,10 +90,10 @@ export const UserProfile = () => {
                     Se unió en {formatFullDate(user.date_joined).slice(5,-7)}
                 </div>
                 <div className="flex gap-3 w-full py-2 text-neutral-500 ">
-                <Link to="/contacts/following">
+                <Link to={`/${username}/following`} className="hover:underline decoration-white">
                     <span className="text-white">{user.following}</span> Siguiendo
                 </Link>
-                <Link to="/contacts/followers">
+                <Link to={`/${username}/followers`} className="hover:underline decoration-white">
                     <span className="text-white">{user.followers}</span> Seguidores
                 </Link>
                 </div>

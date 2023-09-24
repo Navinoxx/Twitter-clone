@@ -29,24 +29,24 @@ export const ProfileLink = () => {
 
     return (
         <div className="dropdown dropdown-top w-full">
-            <label
+            <div
                 tabIndex={0}
-                className="rounded-full flex text-2xl p-2 hover:bg-blue-300 hover:bg-opacity-10 cursor-pointer items-center"
+                className="rounded-full flex text-2xl m-1 p-2 hover:bg-blue-300 hover:bg-opacity-10 cursor-pointer items-center"
             >
                 <div className="avatar">
-                    <div className="w-11 rounded-full">
+                    <div className="w-10 rounded-full">
                         <img src={user?.avatar} alt="User Avatar"/>
-                    </div>
+                    </div>  
                 </div>
-                <div className="ml-4">
+                <div className="hidden xl:block mx-4">
                     <p className="text-sm">{user?.name || user?.username}</p>
                     <p className="text-neutral-500 text-sm">@{user?.username}</p>
                 </div>
-                <div className="ml-auto">
+                <div className="hidden xl:flex ml-auto">
                     <FiMoreHorizontal />
                 </div>
-            </label>
-            <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 rounded-box w-full border-[1px] border-neutral-800 mb-2 shadow-md shadow-neutral-50">
+            </div>
+            <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 rounded-box w-52 border-[1px] bg-black border-neutral-800 mb-2 ml-3 shadow-[0_0px_5px_1px_rgba(255,255,255)] shadow-neutral-50">
                 <button
                 className="hover:bg-blue-300 hover:bg-opacity-10 py-2 rounded-lg"
                     onClick={handleLogout}

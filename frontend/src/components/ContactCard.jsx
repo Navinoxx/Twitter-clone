@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { userProfile } from "../api/users";
 
 export function ContactCard({contact}) {
+    const myUser = localStorage.getItem("username");
     const username = contact.username
 
     const {data: user} = useQuery({
@@ -14,8 +15,8 @@ export function ContactCard({contact}) {
 
     return (
         <> 
-            <div className="flex justify-between border-b-[1px] border-neutral-800 p-5 cursor-pointer hover:bg-neutral-900 transition">
-                <Link to={`/profile/${contact.username}`}>
+            <div className="flex justify-between p-5 cursor-pointer hover:bg-neutral-900 transition">
+                <Link to={`/${contact.username}`}>
                     <div className="flex flex-row items-start gap-3">
                         <div className="avatar">
                             <div className="w-11 bg-black rounded-full">
@@ -37,9 +38,13 @@ export function ContactCard({contact}) {
                         </div>
                     </div>
                 </Link>
-                <div className="place-self-center">
-                    <FollowBtn user={user}/>
-                </div>
+                {
+                    myUser !== contact.username && (
+                        <div className="place-self-center">
+                            <FollowBtn user={user}/>
+                        </div>
+                    )
+                }
             </div>
         </>
     )

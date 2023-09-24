@@ -86,23 +86,23 @@ export const Sidebar = () => {
         },
         { icon: selectedPage === "/bookmarks" ? <BsBookmarksFill/> : (<BsBookmarks/>), text: "Guardados", link: "/bookmarks", page: "Guardados" },
         { icon: selectedPage === "/lists" ? <RiFileList2Fill/> : (<RiFileList2Line/>), text: "Listas", link: "/lists", page: "Listas" },
-        { icon: selectedPage === `/profile/${username}` ? <BiSolidUser/> : (<BiUser/>), text: "Perfil", link: `/profile/${username}`, page: "perfil" },
+        { icon: selectedPage === `/${username}` ? <BiSolidUser/> : (<BiUser/>), text: "Perfil", link: `/${username}`, page: "perfil" },
         { icon: <FiMoreHorizontal className="icon" />, text: "Más" }
     ];
 
     return (
         <header className="flex flex-col fixed h-full justify-between">
-            <div className="space-y-2.5 mt-3 mb-2.5 xl:ml-24">
-                <div className="p-4">
+            <div className="my-2 xl:ml-24">
+                <div className="p-5">
                     <BsTwitter className="text-2xl text-white" />
                 </div>
-                <nav>
+                <nav className="inline">
                     {links.map((link) => (
                         <SidebarLink key={link.text} icon={link.icon} text={link.text} link={link.link} onClick={() => setSelectedPage(link.link)} />
                     ))}
                 </nav>
             </div>
-            <div className="space-y-2.5 mb-2.5 xl:ml-24 p-2">
+            <div className="mb-4 xl:ml-24">
                 <ProfileLink />
             </div>
         </header>

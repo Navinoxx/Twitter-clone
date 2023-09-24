@@ -52,7 +52,7 @@ export const Comments = ({ tweet }) => {
                     <div>
                         <div className="flex flex-row items-center gap-2">
                             <p className="text-white font-semibold cursor-pointer hover:underline">
-                                <Link to={`/profile/${c.username}`}>{c.user || c.username}</Link>
+                                <Link to={`/${c.username}`}>{c.user || c.username}</Link>
                             </p>
                             <span className="text-neutral-500 cursor-pointer hover:underline hidden md:block">
                                 @{c.username}

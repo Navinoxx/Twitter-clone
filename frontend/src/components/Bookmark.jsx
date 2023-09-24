@@ -9,10 +9,10 @@ export const Bookmark = ({ t }) => {
     const bookmarkMutation = useMutation({
         mutationFn: bookmark,
         onSuccess: () => {
-        queryClient.invalidateQueries('tweets')
+            queryClient.invalidateQueries('tweets')
         },
         onError: (error) => {
-        console.log(error)
+            console.log(error)
         }
     })
 

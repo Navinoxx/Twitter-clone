@@ -37,7 +37,7 @@ authAxios.interceptors.request.use(async (config) => {
 
         } catch(err) {
             localStorage.clear()
-            window.location.href = '/login'
+            window.location.href = '/'
         }
     } else {
         return config

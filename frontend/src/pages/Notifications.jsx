@@ -41,7 +41,7 @@ export const Notifications = () => {
 
     const handleFollowNotificationClick = (notificationId, username) => {
         markMutation.mutate(notificationId);
-        navigate(`/profile/${username}`);
+        navigate(`/${username}`);
     };
 
     if (unreadLoading || readLoading) return (

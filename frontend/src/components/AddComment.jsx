@@ -46,9 +46,9 @@ export const AddComment = ({ tweet }) => {
                         className="bg-transparent grow outline-none" placeholder="Comentar" />
                 </div>
                 <div className="flex justify-end mt-4">
-                    <button type="submit" className="bg-sky-400 hover:bg-sky-500 p-2 px-5 rounded-full text-white font-bold">
+                    <button type="submit" className="btn btn-primary btn-sm rounded-full text-white" disabled={!formik.values.body}>
                         Responder
-                    </button>
+                    </button>   
                 </div>
             </form>
         </div>
