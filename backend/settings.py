@@ -97,11 +97,10 @@ CHANNEL_LAYERS = {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
             'hosts': [(os.environ.get('REDIS_HOST'))]
-        }
+        },
+        'ROUTING': 'backend.routing.application',
     }
 }
-
-CHANNEL_LAYERS['default']['CONFIG']['scheme'] = 'wss'
 
 
 # Database
