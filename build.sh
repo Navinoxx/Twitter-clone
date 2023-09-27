@@ -2,7 +2,17 @@
 # exit on error
 set -o errexit
 
+# Instalar dependencias de Python
 pip install -r requirements.txt
 
-python manage.py collectstatic --no-input
+# Ejecutar migraciones de Django
 python manage.py migrate
+
+# Recopilar archivos estáticos
+python manage.py collectstatic --no-input
+
+# Iniciar tu servidor ASGI 
+daphne backend.asgi:application
+
+# Mantén este script en ejecución para que el servidor permanezca activo
+tail -f /dev/null
