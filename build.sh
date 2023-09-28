@@ -12,7 +12,7 @@ python manage.py migrate
 python manage.py collectstatic --no-input
 
 # Iniciar tu servidor ASGI 
-daphne backend.asgi:application
+daphne -b 0.0.0.0 -p 8000 backend.asgi:application
 
 # Mantén este script en ejecución para que el servidor permanezca activo
 tail -f /dev/null
