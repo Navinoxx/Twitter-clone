@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'channels',
-    'daphne',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
@@ -99,7 +98,7 @@ CHANNEL_LAYERS = {
         'CONFIG': {
             'hosts': [(os.environ.get('REDIS_HOST'))]
         },
-        'ROUTING': 'backend.routing.application',
+        'ROUTING': 'chat.routing.application',
     }
 }
 
