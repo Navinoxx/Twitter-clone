@@ -1,10 +1,11 @@
+import { useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getReadNotifications, getUnreadNotifications, markAsRead } from "../api/notifications";
 import { Loader } from "../components/Loader";
-import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import { TitleFeed } from "../components/TitleFeed";
 import { formatDate } from "../utils/formatDate";
+import { Avatar } from "../components/Avatar";
+import toast from "react-hot-toast";
 
 export const Notifications = () => {
     const queryClient = useQueryClient();
@@ -44,12 +45,7 @@ export const Notifications = () => {
         navigate(`/${username}`);
     };
 
-    if (unreadLoading || readLoading) return (
-        <div className="flex h-screen items-center justify-center">
-            <Loader />
-        </div>
-    );
-
+    if (unreadLoading || readLoading) return <Loader />
     if (unreadError || readError) return toast.error(unreadError?.message || readError?.message);
 
     return (
@@ -63,14 +59,10 @@ export const Notifications = () => {
                             ? handleMarkAsRead(notification.id, notification.tweet.id)
                             : handleFollowNotificationClick(notification.id, notification.from_username)
                     }
-                    className="border-b-[1px] border-neutral-800 p-5 cursor-pointer hover:bg-neutral-900 transition"
+                    className="border-b-[1px] border-neutral-800 p-5 cursor-pointer hover:bg-neutral-900"
                 >
                     <div className="flex flex-row items-start gap-3">
-                        <div className="avatar">
-                            <div className="w-11 bg-black rounded-full">
-                                <img src={`${notification.from_user_avatar}`} />
-                            </div>
-                        </div>
+                        <Avatar src={notification.from_user_avatar} />
                         <div>
                             <div className="flex flex-row items-center gap-2">
                                 <p className="text-white font-semibold hover:underline">

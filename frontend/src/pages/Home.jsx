@@ -18,7 +18,7 @@ export const Home = () => {
                             Crear cuenta
                         </button>
                     </Link>
-                    <p className="font-bold mt-20">¿Ya tienes una cuenta?</p>
+                    <p className="font-bold mt-20 my-5">¿Ya tienes una cuenta?</p>
                     <Link to="/login">
                         <button className="btn btn-primary rounded-full w-full my-2 text-white">
                             Iniciar sesión

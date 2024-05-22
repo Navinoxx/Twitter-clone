@@ -1,35 +1,25 @@
-import { Link, useParams } from "react-router-dom";
 import { useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { userProfile } from "../api/users";
 import { Loader } from "../components/Loader";
 import { IoMdCalendar } from "react-icons/io";
 import { EditProfile } from "../components/EditProfile";
-import { MyTweets } from "../components/MyTweets";
-import { MyLikes } from "../components/MyLikes";
-import { MyRe } from "../components/MyRe";
-import { MyMedia } from "../components/MyMedia";
 import { getUserTweets } from "../api/tweets";
 import { TitleFeed } from "../components/TitleFeed";
-import toast from "react-hot-toast";
 import { formatFullDate } from "../utils/formatDate";
 import { ProfileBtn } from "../components/ProfileBtn";
+import { ProfileTabs } from "../components/ProfileTabs";
+import defaultAvatar from "../assets/media/user.png";
+import defaultCover from "../assets/media/cover.jpeg";
+import toast from "react-hot-toast";
 
 export const UserProfile = () => {
+    const navigate = useNavigate();
     const { username } = useParams();
     const myUser = localStorage.getItem("username");
 
-    const [show, setShow] = useState(0);
     const [showModal, setShowModal] = useState(false);
-    const [selected, setSelected] = useState(0);
-
-    const handleTab = (index) => {
-        setShow(index);
-        setSelected(index);
-    }   
-
-    const stylesTabs = "border-b-[1px] border-neutral-800 hover:bg-neutral-900 transition flex-1 py-5";
-    const stylesTabSelected = "border-b-[1px] flex-1 py-5 transition";
 
     const handleModal = () => {
         setShowModal(true);
@@ -55,29 +45,40 @@ export const UserProfile = () => {
         queryFn: () => getUserTweets(username),
     });
 
-    if (isLoadingUser || isLoadingTweets) return (
-        <div className="flex h-screen items-center justify-center">
-            <Loader />
-        </div>
-    );
+    if (isLoadingUser || isLoadingTweets) return <Loader />
+    if (isErrorUser || !user) {
+        toast.error(errorUser?.message);
+        navigate('/home');
+        return null;
+    }
+    if (isErrorTweets) return toast.error(errorTweets?.message);
 
-    if (isErrorUser) return  toast.error(errorUser?.message);
-    if (isErrorTweets) return  toast.error(errorTweets?.message);
+    const handleErrorAvatar = (e) => {
+        e.target.src = defaultAvatar;
+    };
+
+    const handleErrorCover = (e) => {
+        e.target.src = defaultCover;
+    };
 
     return (
         <>
             <EditProfile user={user} showModal={showModal} setShowModal={setShowModal} />
             <TitleFeed title={user.username}/>
-            <img className="bg-black h-[16rem] w-full object-cover" src={user.cover_image} />    
-            <div className="flex justify-between">
-                <div className="avatar ml-3 -mt-20">
-                    <div className="w-[10rem] bg-black rounded-full ring ring-black">
-                        <img src={user.avatar} />
-                    </div>
+            <div className="max-h-[26rem]">
+                <div className="overflow-hidden max-h-[20rem]">
+                    <img src={user.cover_image || defaultCover} onError={handleErrorCover} className="w-full object-cover" />
                 </div>
-                <ProfileBtn myUser={myUser} username={user.username} handleModal={handleModal} user={user}/>
+                <div className="flex justify-between gap-4 ml-4 -mt-20">
+                    <div className="avatar">
+                        <div className="w-44 bg-gray-300 rounded-full ring ring-black">
+                            <img src={user.avatar || defaultAvatar} onError={handleErrorAvatar} />
+                        </div>
+                    </div>
+                    <ProfileBtn myUser={myUser} username={user.username} handleModal={handleModal} user={user}/>
+                </div>
             </div>
-            <p className="text-start ml-4 mt-4 text-xl font-bold ">{user.name}</p>
+            <p className="text-start ml-4 mt-4 text-xl font-bold">{user.name}</p>
             <div className="text-white text-start ml-4">
                 <span className="text-neutral-500 block place-items-center">
                     @{user.username}
@@ -89,7 +90,7 @@ export const UserProfile = () => {
                     <IoMdCalendar size={20} />
                     Se unió en {formatFullDate(user.date_joined).slice(5,-7)}
                 </div>
-                <div className="flex gap-3 w-full py-2 text-neutral-500 ">
+                <div className="flex gap-3 w-full py-2 text-neutral-500">
                 <Link to={`/${username}/following`} className="hover:underline decoration-white">
                     <span className="text-white">{user.following}</span> Siguiendo
                 </Link>
@@ -98,36 +99,7 @@ export const UserProfile = () => {
                 </Link>
                 </div>
             </div>
-            <div className="tabs">
-                <button
-                onClick={() => handleTab(0)}
-                className={selected === 0 ? stylesTabSelected : stylesTabs}
-                >
-                Tweets
-                </button>
-                <button
-                onClick={() => handleTab(1)}
-                className={selected === 1 ? stylesTabSelected : stylesTabs}
-                >
-                Retweets
-                </button>
-                <button
-                onClick={() => handleTab(2)}
-                className={selected === 2 ? stylesTabSelected : stylesTabs}
-                >   
-                Fotos y videos  
-                </button>
-                <button 
-                onClick={() => handleTab(3)}
-                className={selected === 3 ? stylesTabSelected : stylesTabs}
-                >
-                Me gusta
-                </button>
-            </div>
-            {show === 0 && <MyTweets user={user} tweets={tweets} myUser={myUser} />}
-            {show === 1 && <MyRe user={user} />}
-            {show === 2 && <MyMedia tweets={tweets} />}
-            {show === 3 && <MyLikes user={user} />}
+            <ProfileTabs user={user} tweets={tweets} myUser={myUser} />
         </>
     );
 };

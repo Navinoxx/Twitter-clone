@@ -12,11 +12,11 @@ export const Contacts = () => {
 
     const [selected, setSelected] = useState(0);
 
-    const stylesTabs = "border-b-[1px] border-neutral-800 hover:bg-neutral-900 transition flex-1 py-5 text-center";
-    const stylesTabSelected = "border-b-[1px] flex-1 py-5 transition text-center";
+    const stylesTabs = "border-b-[1px] border-neutral-800 hover:bg-neutral-900 flex-1 py-5 text-center";
+    const stylesTabSelected = "border-b-[1px] flex-1 py-5 text-center";
 
     const { data } = useQuery({
-        queryKey: ["contacts"],
+        queryKey: ["contacts", username],
         queryFn: () => userProfile(username),
     });
 
@@ -31,7 +31,7 @@ export const Contacts = () => {
     return (
         <>
             <TitleFeed title={`${username}`}/>
-            <div className="tabs">
+            <div className="grid grid-cols-2">
                 <Link to={`/${username}/followers`} className={selected === 0 ? stylesTabSelected : stylesTabs} onClick={() => setSelected(0)}>
                     Seguidores
                 </Link>

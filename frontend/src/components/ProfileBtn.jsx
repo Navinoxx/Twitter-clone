@@ -1,8 +1,8 @@
-import { PropTypes } from 'prop-types';
-import { follow } from "../api/users";
+import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { follow } from "../api/users";
 import toast from "react-hot-toast";
-import { useState } from 'react';
+import PropTypes from "prop-types";
 
 export const ProfileBtn = ({ myUser, username, handleModal, user }) => {
     const queryClient = useQueryClient();
@@ -27,22 +27,20 @@ export const ProfileBtn = ({ myUser, username, handleModal, user }) => {
     };
 
     return (
-        <div>
-            {myUser === username ? (
-            <button onClick={handleModal} className="btn btn-outline rounded-full text-white mt-4 mr-4">
+        myUser === username ? (
+            <button onClick={handleModal} className="btn btn-outline rounded-full text-white mt-24 mr-4">
                 Editar perfil
             </button>
             ) : (
                 <button
                 onClick={handleFollowClick}
-                className={`btn btn-outline rounded-full text-white mt-4 mr-4 ${isFollowing ? 'hover:text-red-700 hover:bg-red-700 hover:bg-opacity-10 hover:border-red-700' : ''}`}
+                className={`btn btn-outline rounded-full text-white mt-24 mr-4 ${isFollowing ? 'hover:text-red-700 hover:bg-red-700 hover:bg-opacity-10 hover:border-red-700' : ''}`}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
             >
                 {isHovered && isFollowing ? hoverText : isFollowingText}
             </button>
-            )}
-        </div>
+        )
     );
 };
 

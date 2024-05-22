@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { FollowBtn } from "./FollowBtn";
 import { SearchResult } from "./SearchResult";
+import { Avatar } from "./Avatar";
 
 export const Search = () => {
     const [search, setSearch] = useState("");
@@ -37,29 +38,25 @@ export const Search = () => {
     }, []);
 
     return (
-        <div className="fixed hidden lg:inline lg:w-[20rem] xl:w-[28rem] mt-2">
+        <div className="fixed w-[20rem] xl:w-[28rem] mt-2">
             <label className="bg-black z-10">
                 <span className="sr-only">Search</span>
-                <span className="absolute flex mt-4 ml-1">
+                <span className="absolute flex mt-4 ml-2">
                     < MagnifyingGlassIcon className="text-gray-500 h-5"/>
                 </span>
                 <input ref={inputRef} value={search} onChange={(e) => setSearch(e.target.value)} 
-                    className="bg-[#202327] mt-2 rounded-full py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm w-full xl:w-9/12" 
+                    className="bg-[#202327] mt-1 rounded-full py-3 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm w-full xl:w-9/12" 
                     placeholder="Buscar" type="text" name="search" autoComplete="off"/>
             </label>
             {data?.users.length > 0 && <SearchResult data={data.users} />}
-            <div className="text-[#d9d9d9] space-y-3 bg-[#202327] mt-4   pt-2 rounded-xl w-full xl:w-9/12">
+            <div className="text-[#d9d9d9] space-y-3 border border-neutral-800 mt-4 pt-2 rounded-xl w-full xl:w-9/12">
                 <h4 className="font-bold text-xl px-4">A quién seguir</h4>
                 {user?.map((user) => (
                     <div key={user.username} className="hover:bg-white hover:bg-opacity-[0.03] px-4 py-2 cursor-pointer transition duration-200 ease-out flex items-center">
-                        <div className="avatar">
-                            <div className="w-10 bg-black rounded-full">
-                                <img src={`${user.avatar}`} />
-                            </div>
-                        </div>
+                        <Avatar src={user.avatar} />
                         <div className="ml-4 leading-5 group flex-1">
                             <Link to={`/${user.username}`}>
-                                <h4 className="font-bold group-hover:underline">
+                                <h4 className="font-bold group-hover:underline w-36 truncate">
                                     {user.name || user.username}
                                 </h4>
                             </Link>
@@ -69,7 +66,7 @@ export const Search = () => {
                     </div>
                 ))}
                 <button className="hover:bg-white hover:bg-opacity-[0.03] px-4 py-3 cursor-pointer transition duration-200 ease-out flex items-center justify-between w-full text-[#1d9bf0] font-light">
-                Mostrar más
+                    Mostrar más
                 </button>
             </div>
         </div>

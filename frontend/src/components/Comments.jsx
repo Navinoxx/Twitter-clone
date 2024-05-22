@@ -7,6 +7,7 @@ import { AddComment } from "./AddComment";
 import { Link } from "react-router-dom";
 import { BsFillTrashFill } from "react-icons/bs";
 import { formatFullDate } from '../utils/formatDate';
+import { Avatar } from './Avatar';
 
 export const Comments = ({ tweet }) => {
     const queryClient = useQueryClient();
@@ -25,11 +26,11 @@ export const Comments = ({ tweet }) => {
     const deleteCommentMutation = useMutation({
         mutationFn: deleteComment,
         onSuccess: () => {
-        queryClient.invalidateQueries("comments");
-        toast.success("Comment deleted");
+            queryClient.invalidateQueries("comments");
+            toast.success("Eliminaste tu respuesta");
         },
         onError: (error) => {
-        toast.error(error.message);
+            toast.error(error.message);
         },
     });
 
@@ -42,19 +43,16 @@ export const Comments = ({ tweet }) => {
         {comments.map((c) => (
             <div
             key={c.id}
-            className="border-b-[1px] border-neutral-800 p-5 cursor-pointer hover:bg-neutral-900 transition"
+            className="border-b-[1px] border-neutral-800 p-5"
             >
                 <div className="flex flex-row items-start gap-3">
-                    <img
-                    className="h-11 w-11 rounded-full"
-                    src={`${c.avatar}`}
-                    />
+                    <Avatar src={c.avatar} />
                     <div>
-                        <div className="flex flex-row items-center gap-2">
-                            <p className="text-white font-semibold cursor-pointer hover:underline">
+                        <div className="flex flex-row flex-wrap  items-center gap-2">
+                            <p className="text-white font-semibold cursor-pointer hover:underline inline">
                                 <Link to={`/${c.username}`}>{c.user || c.username}</Link>
                             </p>
-                            <span className="text-neutral-500 cursor-pointer hover:underline hidden md:block">
+                            <span className="text-neutral-500 cursor-pointer hover:underline">
                                 @{c.username}
                             </span>
                             <span className="text-neutral-500 text-sm">

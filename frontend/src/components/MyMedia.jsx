@@ -5,15 +5,13 @@ export const MyMedia = ({ tweets }) => {
     const { userId } = useParams();
     
     return (
-        <>
-            {tweets.map((t) => (
-                t.userId === userId && t.image && (
-                    <div className="flex flex-row items-start gap-3" key={t.id}>
-                        <img src={`${t.image}`} />
-                    </div>
-                )
-            ))}
-        </>
+        tweets.map((t) => (
+            t.userId === userId && t.image && (
+                <div className="flex flex-row items-start gap-3" key={t.id}>
+                    <img src={`${t.image}`} />
+                </div>
+            )
+        ))
     );
 }
 

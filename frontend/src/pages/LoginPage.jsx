@@ -42,22 +42,16 @@ export const LoginPage = () => {
             ),
     });
 
-    if (loginMutation.isLoading) return (
-        <div className="flex h-screen items-center justify-center">
-            <Loader />
-        </div>
-    );    
+    if (loginMutation.isLoading) return <Loader /> 
 
     return (
         <main className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
             <div className="m-5 p-10 bg-grey-3">
-                <div className="w-[300px] max-w-md space-y-8 md:w-[400px] lg:w-[400px]">
+                <div className="w-[300px] max-w-md space-y-8 md:w-[400px]">
                     <div >
-                        <BsTwitter
-                        className="mx-auto text-sky-500 h-12 w-12"
-                        />
+                        <BsTwitter className="mx-auto text-sky-500 h-12 w-12"/>
                         <h2 className="mt-6 text-center text-3xl">
-                        Inicia sesión en Twitter  
+                            Inicia sesión en Twitter  
                         </h2>
                     </div>
                     <Formik
@@ -84,10 +78,10 @@ export const LoginPage = () => {
                     )}
                     <div className="flex items-center justify-between">
                         <div className="text-sm">
-                        ¿No tienes una cuenta? 
+                            ¿No tienes una cuenta? 
                             <Link to={"/register"}>
                                 <span className="hover:text-sky-500 ml-2 transition-colors">
-                                Regístrate
+                                    Regístrate
                                 </span>
                             </Link>
                         </div>

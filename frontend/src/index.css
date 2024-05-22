@@ -32,15 +32,15 @@
 
 body {
     overflow-y: scroll;
+    overflow-x: hidden;
     scroll-behavior: smooth;
 }
 
 ::-webkit-scrollbar {
     width: 0.5rem;
-    background: transparent;
+    background: rgb(66, 65, 65);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgb(102, 102, 102);
-    border-radius: 0.2rem;
+    background: rgb(102, 102, 102); 
 }

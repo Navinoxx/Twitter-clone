@@ -1,7 +1,7 @@
-import { PropTypes } from "prop-types";
-import { GoBookmark, GoBookmarkFill } from "react-icons/go";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { GoBookmark, GoBookmarkFill } from "react-icons/go";
 import { bookmark } from "../api/tweets";
+import PropTypes from "prop-types";
 
 export const Bookmark = ({ t }) => {
     const queryClient = useQueryClient()
@@ -17,9 +17,11 @@ export const Bookmark = ({ t }) => {
     })
 
     return (
-        <button onClick={() => bookmarkMutation.mutate(t.id)} className="btn btn-ghost rounded-full hover:bg-blue-700 hover:bg-opacity-20 transition-color">
-            { t.bookmarked ? <GoBookmarkFill color="blue" /> : <GoBookmark />  }
-        </button>
+        <div className="flex col-span-1 items-center hover:text-blue-700">
+            <button onClick={() => bookmarkMutation.mutate(t.id)} className="btn btn-ghost rounded-full hover:bg-blue-700 hover:bg-opacity-20">
+                { t.bookmarked ? <GoBookmarkFill color="blue" /> : <GoBookmark color="inherit" />  }
+            </button>
+        </div>
     );
 };
 

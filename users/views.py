@@ -11,8 +11,10 @@ from . serializers import MyTokenObtainPairSerializer, MyUserSerializer, UserSer
 from .permissions import IsUserOrReadOnly
 from notifications.models import Notification
 from rest_framework.exceptions import ValidationError
+from django.db import transaction
 import cloudinary
 import cloudinary.uploader
+import cloudinary.api
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -62,14 +64,20 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def perform_update(self, serializer):
         user = self.get_object()
+        updated_data = serializer.validated_data
 
-        if user.avatar_public_id:
-            cloudinary.uploader.destroy(user.avatar_public_id)
+        if 'avatar' in updated_data:
+            if user.avatar_public_id:
+                cloudinary.uploader.destroy(user.avatar_public_id)
 
-        if user.cover_image_public_id:
-            cloudinary.uploader.destroy(user.cover_image_public_id)
+        if 'cover_image' in updated_data:
+            if user.cover_image_public_id:
+                cloudinary.uploader.destroy(user.cover_image_public_id)
 
-        serializer.save()
+        try:
+            serializer.save()
+        except ValidationError as e:
+            raise ValidationError({"detail": e.detail})
 
 class MyTokenObtainPairSerializer(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
@@ -104,7 +112,21 @@ def user_register(request):
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
+@transaction.atomic
 def user_delete(request, username):
-    user = User.objects.get(username=username)
+    try:
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return Response({"error": "User not found"}, status=404)
+    
+    try:
+        cloudinary.api.delete_resources_by_prefix(f"tweets/{username}/")
+        cloudinary.api.delete_resources_by_prefix(f"users/{username}/")
+        cloudinary.api.delete_folder(f"tweets/{username}")
+        cloudinary.api.delete_folder(f"users/{username}")
+    except cloudinary.exceptions.Error as e:
+        transaction.set_rollback(True)
+        return Response({"error": str(e)}, status=500)
+    
     user.delete()
     return Response({"message": "User deleted successfully"})

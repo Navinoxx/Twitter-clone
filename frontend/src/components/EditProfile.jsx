@@ -111,85 +111,124 @@ export const EditProfile = ({ user, showModal, setShowModal }) => {
     }, [user.cover_image]);
 
     return (
-        <>
-        {showModal && (
-            <ModalEditProfile
-            setShowModal={setShowModal}
-            >   
+        showModal && (
+            <ModalEditProfile setShowModal={setShowModal}>
                 <div className="flex gap-5">
-                    <button className="btn btn-sm btn-circle btn-ghost text-white" onClick={closeModal}>
-                        ✕
+                    <button
+                    className="btn btn-sm btn-circle btn-ghost text-white"
+                    onClick={closeModal}
+                    >
+                    ✕
                     </button>
                     <h2 className="text-2xl text-grey">Editar perfil</h2>
                 </div>
-                    <form onSubmit={formik.handleSubmit} className="mt-5">
-                        <div className="inline-flex place-items-center justify-center w-full">
-                            <img className="bg-black h-[16rem] w-full object-cover" src={previewCoverImage} />
-                            <label htmlFor="cover_image" className="btn glass opacity-70 btn-circle absolute">
-                                <TbCameraUp/>
-                            </label>
-                            <input
+                <form onSubmit={formik.handleSubmit} className="mt-5">
+                    <div className="inline-flex place-items-center justify-center w-full">
+                        <img
+                            className="bg-black h-[16rem] w-full object-cover"
+                            src={previewCoverImage}
+                        />
+                        <label
+                            htmlFor="cover_image"
+                            className="btn glass opacity-70 btn-circle absolute"
+                        >
+                            <TbCameraUp />
+                        </label>
+                        <input
                             type="file"
                             id="cover_image"
                             name="cover_image"
                             className="hidden"
                             onChange={(e) => {
                                 handlePreviewCoverImage(e);
-                                formik.setFieldValue("cover_image", e.currentTarget.files[0])}}
+                                formik.setFieldValue("cover_image", e.currentTarget.files[0]);
+                            }}
                         />
-                        </div>
-                        <div className="inline-flex place-items-center justify-center ml-7 -mt-16">
-                            <div className="avatar">
-                                <div className="w-28 bg-black rounded-full ring ring-black">
-                                    <img src={previewAvatar} />
-                                </div>
+                    </div>
+                    <div className="inline-flex place-items-center justify-center ml-7 -mt-16">
+                        <div className="avatar">
+                            <div className="w-28 bg-black rounded-full ring ring-black">
+                                <img src={previewAvatar} />
                             </div>
-                            <label htmlFor="avatar" className="btn glass btn-xs opacity-70 btn-circle absolute">
-                                <TbCameraUp/>
-                            </label>
-                            <input
+                        </div>
+                        <label
+                            htmlFor="avatar"
+                            className="btn glass btn-xs opacity-70 btn-circle absolute"
+                        >
+                            <TbCameraUp />
+                        </label>
+                        <input
                             type="file"
                             id="avatar"
                             name="avatar"
                             className="hidden"
                             onChange={(e) => {
-                                handlePreviewAvatar(e);
+                            handlePreviewAvatar(e);
                                 formik.setFieldValue("avatar", e.currentTarget.files[0]);
                             }}
                         />
+                    </div>
+                    <div className="bg-black py-4 rounded-lg">
+                        <div className="relative bg-inherit">
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                placeholder="Nombre"
+                                onChange={formik.handleChange}
+                                value={formik.values.name}
+                                className="peer bg-transparent h-10 w-full rounded-lg text-gray-200 placeholder-transparent ring-1 px-2 ring-neutral-800 focus:ring-sky-600 focus:outline-none"
+                                maxLength={25}
+                                autoComplete="off"
+                            />
+                            <label
+                                htmlFor="username"
+                                className="absolute cursor-text left-0 -top-3 text-sm text-gray-500 bg-inherit mx-1 px-1 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-focus:-top-3 peer-focus:text-sky-600 peer-focus:text-sm transition-all"
+                            >
+                                Nombre
+                            </label>
                         </div>
-                        <input
-                            id="name"
-                            name="name"
-                            placeholder="Tú nombre"
-                            onChange={formik.handleChange} value={formik.values.name}
-                            className="border-b-[1px] border-neutral-800 w-full p-5 cursor-pointer my-3 bg-transparent outline-neutral-800"
-                        />
-                        <input
+                    </div>
+                    <div className="bg-black py-4 rounded-lg">
+                        <div className="relative bg-inherit">
+                            <textarea
                             id="bio"
                             name="bio"
-                            placeholder="Sobre mí"
-                            onChange={formik.handleChange} value={formik.values.bio}
-                            className="border-b-[1px] border-neutral-800 w-full p-5 cursor-pointer my-3 bg-transparent outline-neutral-800"
-                        />
-                        <button
-                            type="submit"
-                            className="btn btn-outline rounded-full font-bold w-full mt-5"
-                            disabled={formik.isSubmitting || formik.initialValues === formik.values}
-                        >
-                            {formik.isSubmitting ? (
-                                <>
-                                    <span className="loading loading-spinner"></span>
-                                    Guardando cambios
-                                </>
-                            ) : (
-                                'Guardar cambios'
-                            )}
-                        </button>
-                    </form>
+                            placeholder="Biografía"
+                            onChange={formik.handleChange}
+                            value={formik.values.bio}
+                            className="peer bg-transparent w-full rounded-lg text-gray-200 placeholder-transparent ring-1 px-2 pt-2 ring-neutral-800 focus:ring-sky-600 focus:outline-none resize-none"
+                            maxLength={250}
+                            autoComplete="off"
+                            rows={5}
+                            />
+                            <label
+                                htmlFor="bio"
+                                className="absolute cursor-text left-0 -top-3 text-sm text-gray-500 bg-inherit mx-1 px-1 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-focus:-top-3 peer-focus:text-sky-600 peer-focus:text-sm transition-all"
+                            >
+                                Biografía
+                            </label>
+                        </div>
+                    </div>
+                    <button
+                        type="submit"
+                        className="bg-white text-black hover:bg-slate-300 rounded-full font-bold float-end mt-2 px-4 py-2 cursor-pointer disabled:bg-opacity-50"
+                        disabled={
+                            formik.isSubmitting || formik.initialValues === formik.values
+                        }
+                    >
+                    {formik.isSubmitting ? (
+                        <>
+                            <span className="loading loading-spinner">Guardando</span>
+                            <span className="pl-2">Guardando</span>
+                        </>
+                    ) : (
+                        "Guardar"   
+                    )}
+                    </button>
+                </form>
             </ModalEditProfile>
-        )}
-        </>
+        )
     );
 };
 

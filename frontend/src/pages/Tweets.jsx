@@ -1,8 +1,7 @@
-import { getSoloTweet } from "../api/tweets";
-import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { Link, useParams } from "react-router-dom";
+import { getSoloTweet } from "../api/tweets";
 import { Loader } from "../components/Loader";
-import toast from "react-hot-toast";
 import { RtBtn } from "../components/RtBtn";
 import { LikeBtn } from "../components/LikeBtn";
 import { Comments } from "../components/Comments";
@@ -10,6 +9,8 @@ import { TitleFeed } from "../components/TitleFeed";
 import { formatFullDate } from "../utils/formatDate";
 import { Bookmark } from "../components/Bookmark";
 import { CommentBtn } from "../components/CommentBtn";
+import { Avatar } from "../components/Avatar";
+import toast from "react-hot-toast";
 
 export const Tweet = () => {
     const { id } = useParams();
@@ -21,50 +22,39 @@ export const Tweet = () => {
         error,
     } = useQuery(["soloTweet", id], () => getSoloTweet(id));
 
-    if (isLoading) return (
-        <div className="flex h-screen items-center justify-center">
-            <Loader />
-        </div>
-    );
+    if (isLoading) return <Loader />
     if (isError) return toast.error(error.message);
     
     return (
         <>
-            <TitleFeed title="Tweet"/>
-            <div className="border-[1px] border-neutral-800 p-5 cursor-pointer hover:bg-neutral-900 transition">
-                <div className="flex flex-row items-start gap-3">
-                    <div className="avatar">
-                        <div className="w-11 bg-black rounded-full">
-                            <img src={`${tweet.avatar}`} />
-                        </div>
-                    </div>
-                    <div>
-                        <div className="flex flex-row items-center gap-2">
+            <TitleFeed title="Post"/>
+            <div className="px-5 pt-5">
+                <div className="flex flex-col items-start gap-3">
+                    <div className="flex items-center gap-3">
+                        <Avatar src={tweet.avatar} />
+                        <div className="flex flex-col">
                             <p className="text-white font-semibold cursor-pointer hover:underline">
                                 <Link to={`/${tweet.username}`}>{tweet?.user || tweet?.username}</Link>
                             </p>
-                            <span className="text-neutral-500 cursor-pointer hover:underline hidden md:block">
+                            <span className="text-neutral-500 cursor-pointer hover:underline">  
                                 @{tweet.username}
                             </span>
-                            <span className="text-neutral-500 text-sm">
-                                · {formatFullDate(tweet.created_at)}
-                            </span>
                         </div>
+                    </div>
+                    <div className="w-full">
                         <div className="text-white mt-1 text-start break-all">{tweet.content}</div>
-                        <img src={tweet.image} />
-                        <div className="flex flex-row items-center mt-3 gap-10">
-                            <div className="flex flex-row items-center text-neutral-500 gap-2 cursor-pointer transition hover:text-blue-700">
-                                <CommentBtn t={tweet} />
-                                <p>{tweet.parent.length}</p>
+                        {tweet.image && 
+                            <div className="mt-5 rounded-xl overflow-hidden">
+                                <img src={`${tweet.image}`} alt="imagen" />
                             </div>
-                            <div className="flex flex-row items-center text-neutral-500 gap-2 cursor-pointer transition hover:text-green-700">
-                                <RtBtn t={tweet} />
-                                <p>{tweet.retweets_count}</p>
-                            </div>
-                            <div className="flex flex-row items-center text-neutral-500 gap-2 cursor-pointer transition hover:text-red-700">
-                                <LikeBtn t={tweet} />
-                                <p>{tweet.likes_count}</p>
-                            </div>
+                        }
+                        <span className="text-neutral-500 text-sm">
+                            {formatFullDate(tweet.created_at)}
+                        </span>
+                        <div className="grid grid-cols-10 items-center mt-4 border-y border-neutral-800">
+                            <CommentBtn t={tweet} />
+                            <RtBtn t={tweet} />
+                            <LikeBtn t={tweet} />
                             <Bookmark t={tweet} />
                         </div>
                     </div>

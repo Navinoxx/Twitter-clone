@@ -6,6 +6,7 @@ import { getChat } from "../api/chat";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader } from "../components/Loader";
 import { formatDate } from '../utils/formatDate';
+import { TitleFeed } from "../components/TitleFeed";
 
 export const Chat = () => {
     const { user } = useParams()
@@ -81,62 +82,50 @@ export const Chat = () => {
         }
     }, []);
 
-    if (isLoading) return (
-        <div className="flex h-screen items-center justify-center">
-            <Loader />
-        </div>
-        );
+    if (isLoading) return <Loader />
 
     return (
         <>
-        <div className="border-b-[1px] border-neutral-800 p-5">
-            <div className="flex flex-row items-start gap-3">
-            <div>
-                <div className="flex flex-row items-center gap-2">
-                    <p className="text-white font-semibold text-xl">{user}</p>
+            <TitleFeed title={user} />
+            <div className="border-b-[1px] border-neutral-800">
+                <div className="scrollable-container relative w-full p-2 overflow-y-auto h-[40rem] flex flex-col-reverse" ref={chatContainerRef}>
+                    <ul className="space-y-2">
+                        {newChat?.map((message) => (
+                            <li
+                            key={message.type === 'chat_message_echo' ? `echo_${message.message}` : message.id}
+                                className={`${message.from_username === me ? 'chat chat-end' : 'chat chat-start'}`}
+                            >
+                                <div className="chat-bubble">
+                                    <span className="block text-sky-400">{message.to_username !== me ? 'Tú' : message.from_username}</span>
+                                    <span className="block break-words">{message.message}</span>
+                                </div>
+                                <span className="chat-footer opacity-50">    
+                                    {formatDate(message.timestamp)}
+                                </span>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             </div>
-            </div>
-        </div>
-        <div className="border-b-[1px] border-neutral-800 p-5 cursor-pointer">
-            <div className="scrollable-container relative w-full p-2 overflow-y-auto h-[40rem] flex flex-col-reverse" ref={chatContainerRef}>
-                <ul className="space-y-2">
-                    {newChat?.map((message) => (
-                        <li
-                        key={message.type === 'chat_message_echo' ? `echo_${message.message}` : message.id}
-                            className={`${message.from_username === me ? 'chat chat-end' : 'chat chat-start'}`}
-                        >
-                            <div className="chat-bubble">
-                                <span className="block text-indigo-600">{message.to_username !== me ? 'Tú' : message.from_username}</span>
-                                <span className="block break-words">{message.message}</span>
-                            </div>
-                            <span className="chat-footer opacity-50">    
-                                {formatDate(message.timestamp)}
-                            </span>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-        </div>
-        <form className="flex items-center justify-between w-full p-3 join">
-            <input
-            type="text"
-            placeholder="Mensaje..."
-            onChange={(e) => setMessage(e.target.value)}
-            value={message}
-            className="input w-full join-item"
-            maxLength={50}
-            autoFocus
-            />
-            <button
-            type="submit"
-            onClick={sendMsj}
-            className="btn btn-outline join-item"
-            disabled={!message}
-            >
-            Enviar
-            </button>
-        </form>
+            <form className="flex items-center justify-between w-full p-3 join">
+                <input
+                type="text"
+                placeholder="Mensaje..."
+                onChange={(e) => setMessage(e.target.value)}
+                value={message}
+                className="input w-full join-item"
+                maxLength={50}
+                autoFocus
+                />
+                <button
+                type="submit"
+                onClick={sendMsj}
+                className="btn btn-outline join-item"
+                disabled={!message}
+                >
+                Enviar
+                </button>
+            </form>
         </>
     );
 };

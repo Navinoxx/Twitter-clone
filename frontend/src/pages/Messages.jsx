@@ -3,32 +3,27 @@ import { userProfile } from "../api/users";
 import { useQuery } from "@tanstack/react-query";
 import { TitleFeed } from "../components/TitleFeed";
 import { getUnreadMessages } from "../api/chat";
+import { Avatar } from "../components/Avatar";
 import PropTypes from "prop-types";
 
 export const Messages = () => {
     const myUser = localStorage.getItem("username");
 
     const { data: userData } = useQuery({
-        queryKey: ["contacts"],
+        queryKey: ["contacts", myUser],
         queryFn: () => userProfile(myUser),
     });
 
-    const contacts = [...(userData?.followed_usernames ?? []), ...(userData?.following_usernames ?? [])];
-    const uniqueContacts = [];
-    const seenContacts = {};
+    const contacts = new Set([
+        ...(userData?.followed_usernames ?? []),
+        ...(userData?.following_usernames ?? []),
+    ]);
 
-    for (const contact of contacts) {
-        if (!seenContacts[contact]) {
-            uniqueContacts.push(contact);
-            seenContacts[contact] = true;
-        }
-    }
-
-    return (    
+    return (
         <>
             <TitleFeed title="Mensajes"/>
-            {uniqueContacts.map((contact) => (
-                <ContactItem key={contact.username} contact={contact} />
+            {Array.from(contacts).map((contact, index) => (
+                <ContactItem key={index} contact={contact} />
             ))}
         </>
     );
@@ -43,13 +38,9 @@ function ContactItem({ contact }) {
     
     return (
         <Link to={`/chat/${contact.username}`} key={contact.username}>
-            <div className="border-b-[1px] border-neutral-800 p-5 cursor-pointer hover:bg-neutral-900 transition">
+            <div className="border-b-[1px] border-neutral-800 p-5 cursor-pointer hover:bg-neutral-900">
                 <div className="flex flex-row items-start gap-3">
-                    <div className="avatar">
-                        <div className="w-11 bg-black rounded-full">
-                            <img src={`${contact.avatar}`} alt={contact.username} />
-                        </div>
-                    </div>
+                    <Avatar src={contact.avatar} />
                     <div className="flex flex-col flex-1">
                         <div className="flex items-center gap-2">
                             <p className="text-white font-semibold hover:underline">

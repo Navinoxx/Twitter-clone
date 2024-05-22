@@ -6,27 +6,16 @@ import { MdNotifications, MdNotificationsNone, MdEmail, MdOutlineEmail } from "r
 import { BsBookmarksFill, BsBookmarks } from "react-icons/bs";
 import { SidebarLink } from "./SidebarLink";
 import { BsTwitter } from "react-icons/bs";
-import { useQuery } from "@tanstack/react-query";
-import { getUnreadNotifications } from "../api/notifications";
-import { getUnreadChats } from "../api/chat";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { ProfileLink } from "./ProfileLink";
+import { NotificationIcon } from "./NotificationIcon";
+import { MessagesIcon } from "./MessagesIcon";
 
 export const Sidebar = () => {
     const username = localStorage.getItem("username")
     const [selectedPage, setSelectedPage] = useState("/home")
     const location = useLocation();
-
-    const { data: unreadNotifications } = useQuery({
-        queryKey: ["noti", "unread"],
-        queryFn: getUnreadNotifications,
-    });
-
-    const { data: hasUnreadMessages  } = useQuery({
-        queryKey: ["has_unread_messages"],
-        queryFn: getUnreadChats,
-    })
 
     useEffect(() => {
         if (location.pathname === "/home") {
@@ -35,76 +24,41 @@ export const Sidebar = () => {
     }, [location.pathname])
 
     const links = [
-        { icon: selectedPage === "/home" ? <GoHomeFill/> : (<GoHome/>), text: "Inicio", link: "/home", page: "Inicio" },
+        { icon: selectedPage === "/home" ? <GoHomeFill/> : <GoHome/>, text: "Inicio", link: "/home" },
         {
-            icon: (
-                <div>
-                    {unreadNotifications?.length > 0 ? (
-                        <div className="indicator">
-                            <span className="indicator-item badge badge-primary badge-xs"></span>
-                            {selectedPage === "/notifications" ? (
-                        <MdNotifications />
-                    ) : (
-                        <MdNotificationsNone />
-                    )}
-                        </div>
-                    ) : (selectedPage === "/notifications" ? (
-                        <MdNotifications />
-                    ) : (
-                        <MdNotificationsNone />
-                    ))
-                    }
-                </div>
-            ),
+            icon: selectedPage === "/notifications" ? <NotificationIcon><MdNotifications /></NotificationIcon> : <NotificationIcon><MdNotificationsNone /></NotificationIcon>,
             text: "Notificaciones",
-            link: "/notifications",
-            page: "Notificaciones"
+            link: "/notifications"
         },
         {
-            icon: (
-                <div>
-                    {hasUnreadMessages?.has_unread_messages > 0 ? (
-                        <div className="indicator">
-                            <span className="indicator-item badge badge-primary badge-xs"></span>
-                            {selectedPage === "/messages" ? (
-                        <MdEmail/>
-                    ) : (
-                        <MdOutlineEmail />
-                    )}
-                        </div>
-                    ) : (selectedPage === "/messages" ? (
-                        <MdEmail/>
-                    ) : (
-                        <MdOutlineEmail />
-                    ))
-                    }
-                </div>
-            ),
+            icon: selectedPage === "/messages" ? <MessagesIcon><MdEmail/></MessagesIcon> : <MessagesIcon><MdOutlineEmail/></MessagesIcon>,
             text: "Mensajes",
-            link: "/messages",
-            page: "Mensajes"
+            link: "/messages"
         },
-        { icon: selectedPage === "/bookmarks" ? <BsBookmarksFill/> : (<BsBookmarks/>), text: "Guardados", link: "/bookmarks", page: "Guardados" },
-        { icon: selectedPage === "/lists" ? <RiFileList2Fill/> : (<RiFileList2Line/>), text: "Listas", link: "/lists", page: "Listas" },
-        { icon: selectedPage === `/${username}` ? <BiSolidUser/> : (<BiUser/>), text: "Perfil", link: `/${username}`, page: "perfil" },
-        { icon: <FiMoreHorizontal className="icon" />, text: "Más" }
+        { icon: selectedPage === "/bookmarks" ? <BsBookmarksFill/> : (<BsBookmarks/>), text: "Guardados", link: "/bookmarks" },
+        { icon: selectedPage === "/lists" ? <RiFileList2Fill/> : (<RiFileList2Line/>), text: "Listas", link: "/lists" },
+        { icon: selectedPage === `/${username}` ? <BiSolidUser/> : (<BiUser/>), text: "Perfil", link: `/${username}` }
     ];
 
     return (
-        <header className="flex flex-col fixed h-full justify-between">
-            <div className="my-2 xl:ml-24">
-                <div className="p-5">
+        <nav className="flex sm:flex-col fixed h-full justify-between w-full sm:w-auto">
+            <div className="sm:my-2 xl:ml-24 mx-auto">
+                <div className="hidden sm:block p-5">
                     <BsTwitter className="text-2xl text-white" />
                 </div>
-                <nav className="inline">
+                <ul className="flex sm:flex-col">
                     {links.map((link) => (
                         <SidebarLink key={link.text} icon={link.icon} text={link.text} link={link.link} onClick={() => setSelectedPage(link.link)} />
                     ))}
-                </nav>
+                    <li className="hidden sm:flex rounded-full hover:bg-gray-300 hover:bg-opacity-10 p-3 items-center text-2xl m-2 cursor-pointer">
+                        <FiMoreHorizontal className="icon" />
+                        <span className="hidden xl:block ml-4">Más opciones</span>
+                    </li>
+                </ul>
             </div>
-            <div className="mb-4 xl:ml-24">
+            <div className="hidden sm:block mb-4 xl:ml-24">
                 <ProfileLink />
             </div>
-        </header>
+        </nav>
     );
 };

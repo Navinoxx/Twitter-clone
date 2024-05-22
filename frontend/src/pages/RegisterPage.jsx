@@ -47,22 +47,16 @@ export const RegisterPage = () => {
             .oneOf([Yup.ref('password'), null], 'Las contraseñas no coinciden')
     });
 
-    if (registerMutation.isLoading) return (
-        <div className="flex h-screen items-center justify-center">
-            <Loader />
-        </div>
-    );    
+    if (registerMutation.isLoading) return <Loader />
 
     return (
         <main className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
             <div className="m-5 p-10 bg-grey-3">
                 <div className="w-[300px] max-w-md space-y-8 md:w-[400px] lg:w-[400px]">
                     <div >
-                        <BsTwitter
-                        className="mx-auto text-sky-500 h-12 w-12"
-                        />
+                        <BsTwitter className="mx-auto text-sky-500 h-12 w-12"/>
                         <h2 className="mt-6 text-center text-3xl">
-                        Regístrate en Twitter  
+                            Regístrate en Twitter  
                         </h2>
                     </div>
                     <Formik
@@ -102,7 +96,7 @@ export const RegisterPage = () => {
                     )}
                     <div className="flex items-center justify-between">
                         <div className="text-sm">
-                        ¿Ya tienes una cuenta?
+                            ¿Ya tienes una cuenta?
                             <Link to={"/login"}>
                                 <span className="hover:text-sky-500 ml-2 transition-colors">
                                 Inicia sesión!

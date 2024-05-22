@@ -4,9 +4,11 @@ import { Link } from 'react-router-dom';
 export const SidebarLink = ({ icon, text, link, onClick }) => {
 
     return (
-        <Link to={link} onClick={onClick} className="rounded-full flex text-2xl p-5 hover:bg-blue-300 hover:bg-opacity-10 cursor-pointer items-center">
-            {icon}
-            <span className="hidden xl:inline ml-4">{text}</span>
+        <Link to={link} onClick={onClick} className="text-2xl m-2">
+            <li className="rounded-full hover:bg-gray-300 hover:bg-opacity-10 flex p-3 items-center">
+                {icon}
+                <span className="hidden xl:block ml-4">{text}</span>
+            </li>
         </Link>
     );
 };

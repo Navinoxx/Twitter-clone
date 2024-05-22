@@ -1,8 +1,8 @@
-import { PropTypes } from 'prop-types';
-import { follow } from "../api/users";
+import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { follow } from "../api/users";
 import toast from "react-hot-toast";
-import { useState } from 'react';
+import  PropTypes from "prop-types";
 
 export const FollowBtn = ({ user }) => {
     const queryClient = useQueryClient();

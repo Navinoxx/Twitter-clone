@@ -1,6 +1,6 @@
 import { ContactCard } from "./ContactCard";
 
-export function FollowersContacts({data}) {
+export function FollowersContacts({ data }) {
 
     return (
         data?.map((contact) => (

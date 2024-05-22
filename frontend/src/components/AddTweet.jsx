@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { userProfile } from "../api/users";
 import { uploadToCloudinary } from "../utils/UploadToCloudinary";
 import { EmojiPicker } from "./EmojiPicker";
+import { Avatar } from "./Avatar";
 
 export const AddTweet = () => {
     const queryClient = useQueryClient();
@@ -60,28 +61,23 @@ export const AddTweet = () => {
     });
 
     return (
-        <div className="border-[1px] border-neutral-800">
+        <div className="border-b-[1px] border-neutral-800">
             <form onSubmit={formik.handleSubmit}>
-                <div
-                className="flex gap-3 w-full py-6 ml-2">
-                    <div className="avatar">
-                        <div className="w-14 bg-black rounded-full">
-                            <img src={user?.avatar} />
-                        </div>
-                    </div>
+                <div className="flex items-start gap-3 w-full p-5">
+                    <Avatar src={user?.avatar} />
                     <textarea
                         type="text"
                         name="content"
                         onChange={formik.handleChange}
                         value={(formik.values.content)} 
-                        className="bg-transparent grow outline-none resize-none scroll-none"
+                        className="bg-transparent grow outline-none resize-none scroll-none text-xl"
                         placeholder="¡¿Que está pasando?!"
                     />
                 </div>
                 <div className="flex justify-center items-center">
                     {formik.values.image && <SeeImage file={formik.values.image} onClose={() => formik.setFieldValue("image", "")}/>}
                 </div>
-                <div className="flex justify-between p-3 border-t-[1px] border-neutral-800 mx-12">
+                <div className="flex justify-between py-3 border-t-[1px] border-neutral-800 mx-12">
                     <div className="flex my-auto">
                         <label htmlFor="file-input" className="btn btn-circle btn-outline btn-sm border-none hover:bg-sky-500 hover:bg-opacity-10">
                             <BsImage className="flex transition text-sky-500"/>
