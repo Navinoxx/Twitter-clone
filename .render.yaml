@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: Twitter-clone
+    env: python
+    plan: free
+    buildCommand: "./build.sh"
+    startCommand: "daphne -b 0.0.0.0 -p 8000 backend.asgi:application"
