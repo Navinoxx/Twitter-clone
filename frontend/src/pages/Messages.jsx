@@ -14,15 +14,13 @@ export const Messages = () => {
         queryFn: () => userProfile(myUser),
     });
 
-    const contacts = new Set([
-        ...(userData?.followed_usernames ?? []),
-        ...(userData?.following_usernames ?? []),
-    ]);
+    const contacts = [...(userData?.followed_usernames ?? []), ...(userData?.following_usernames ?? [])];
+    const uniqueContacts = contacts.filter((contact, index, self) => index === self.findIndex((c) => c.username === contact.username));
 
     return (
         <>
             <TitleFeed title="Mensajes"/>
-            {Array.from(contacts).map((contact, index) => (
+            {uniqueContacts.map((contact, index) => (
                 <ContactItem key={index} contact={contact} />
             ))}
         </>
@@ -30,7 +28,6 @@ export const Messages = () => {
 };
 
 function ContactItem({ contact }) {
-    
     const { data: unreadNotifications } = useQuery({
         queryKey: ["unread_count", contact.username],
         queryFn: () => getUnreadMessages(contact.username),

@@ -1,7 +1,7 @@
 import { Outlet, Navigate } from "react-router-dom";
 
 export const PrivateRoutes = () => {
-    const userId = localStorage.getItem('user_id') || undefined;
+    const token = localStorage.getItem('access') || undefined;
 
-    return userId ? <Outlet /> : <Navigate to="/home" replace />;
+    return token ? <Outlet /> : <Navigate to="/" replace />;
 }

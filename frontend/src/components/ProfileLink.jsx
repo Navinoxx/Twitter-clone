@@ -20,6 +20,7 @@ export const ProfileLink = () => {
 
     const handleLogout = async () => {
         localStorage.clear();
+        queryClient.clear();
         navigate("/");
     };
 
