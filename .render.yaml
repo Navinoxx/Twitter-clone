@@ -5,3 +5,6 @@ services:
     plan: free
     buildCommand: "./build.sh"
     startCommand: "daphne -b 0.0.0.0 -p 8000 backend.asgi:application"
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: "backend.settings"
